@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Moja Rutyna</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+:root{
+–bg:#1a0a0e;
+–bg2:#220d12;
+–card:#2e1218;
+–card2:#3a1820;
+–rose:#e8a0b0;
+–burg:#8b2a3a;
+–burg2:#c4485a;
+–gold:#d4956a;
+–text:#f5e8ec;
+–muted:#9a7080;
+–line:#3d1e26;
+–green:#7ab89a;
+}
+
+body{font-family:‘Jost’,sans-serif;background:var(–bg);color:var(–text);min-height:100vh;overflow-x:hidden;}
+
+/* ─── HOME ─── */
+#home{min-height:100vh;display:flex;flex-direction:column;padding:0;}
+
+.home-top{
+padding:56px 28px 32px;
+background:linear-gradient(160deg,#3a1020 0%,#1a0a0e 60%);
+position:relative;overflow:hidden;
+}
+.home-top::before{
+content:’’;position:absolute;top:-60px;right:-60px;
+width:200px;height:200px;border-radius:50%;
+background:radial-gradient(circle,rgba(196,72,90,0.15) 0%,transparent 70%);
+}
+
+.home-date{font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(–muted);margin-bottom:16px;}
+
+.home-title{font-family:‘Playfair Display’,serif;font-size:38px;font-weight:400;line-height:1.1;margin-bottom:6px;}
+.home-title em{font-style:italic;color:var(–rose);}
+
+.home-sub{font-size:13px;color:var(–muted);margin-top:8px;line-height:1.5;}
+
+.active-pill{
+display:inline-flex;align-items:center;gap:6px;
+margin-top:20px;padding:6px 14px;border-radius:20px;
+border:1px solid var(–line);
+font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;
+color:var(–rose);background:rgba(232,160,176,0.08);
+}
+
+.home-btns{padding:28px 24px;display:flex;flex-direction:column;gap:14px;flex:1;justify-content:center;}
+
+.main-btn{
+width:100%;padding:20px 24px;border-radius:18px;
+border:none;cursor:pointer;font-family:‘Jost’,sans-serif;
+display:flex;align-items:center;gap:16px;
+transition:transform 0.15s,box-shadow 0.15s;
+position:relative;overflow:hidden;
+}
+.main-btn:active{transform:scale(0.98);}
+
+.btn-am{
+background:linear-gradient(135deg,#c4485a 0%,#8b2a3a 100%);
+box-shadow:0 8px 32px rgba(196,72,90,0.35);
+}
+.btn-pm{
+background:linear-gradient(135deg,#3a1828 0%,#5a2035 100%);
+border:1px solid var(–line);
+box-shadow:0 4px 20px rgba(0,0,0,0.4);
+}
+
+.btn-icon{font-size:26px;flex-shrink:0;}
+.btn-text{text-align:left;}
+.btn-text strong{display:block;font-size:16px;font-weight:500;color:#fff;margin-bottom:2px;}
+.btn-text span{font-size:12px;color:rgba(255,255,255,0.6);}
+
+.week-strip{padding:0 24px 32px;}
+.week-strip-label{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(–muted);margin-bottom:12px;}
+.week-row{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+.wday{text-align:center;}
+.wday-name{font-size:9px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:var(–muted);margin-bottom:5px;}
+.wday-dot{width:28px;height:28px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;}
+.dot-retinol{background:#4a2040;color:#c890c8;}
+.dot-acid{background:#1e3828;color:#7ab890;}
+.dot-peel{background:#1a2838;color:#7a9ab8;}
+.dot-rest{background:#2a2218;color:#a09060;}
+.wday-today .wday-dot{outline:2px solid var(–burg2);outline-offset:2px;}
+
+/* ─── GUIDE ─── */
+#guide{display:none;min-height:100vh;flex-direction:column;background:var(–bg);}
+#guide.active{display:flex;}
+
+.guide-header{
+padding:44px 24px 20px;
+background:linear-gradient(160deg,#3a1020 0%,#1a0a0e 70%);
+display:flex;align-items:center;gap:14px;
+border-bottom:1px solid var(–line);
+}
+
+.back-btn{
+width:36px;height:36px;border-radius:50%;
+background:var(–card);border:1px solid var(–line);
+display:flex;align-items:center;justify-content:center;
+cursor:pointer;font-size:16px;flex-shrink:0;
+color:var(–muted);
+}
+
+.guide-header-text{flex:1;}
+.guide-header-label{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(–muted);margin-bottom:2px;}
+.guide-header-title{font-family:‘Playfair Display’,serif;font-size:20px;font-weight:400;}
+
+.progress-bar-wrap{padding:0 24px 0;margin-top:16px;background:var(–bg);}
+.progress-numbers{display:flex;justify-content:space-between;font-size:10px;color:var(–muted);margin-bottom:6px;letter-spacing:0.05em;}
+.progress-track{height:3px;background:var(–line);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(–burg),var(–burg2));border-radius:2px;transition:width 0.4s ease;}
+
+/* STEP CARD */
+.step-area{flex:1;padding:24px 24px 200px;overflow-y:auto;background:var(–bg);}
+
+.step-card{
+background:var(–card);border:1px solid var(–line);
+border-radius:20px;padding:24px;
+animation:slideIn 0.3s ease both;
+}
+@keyframes slideIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.step-card-num{
+font-size:10px;font-weight:500;letter-spacing:0.12em;
+text-transform:uppercase;color:var(–muted);margin-bottom:12px;
+}
+
+.step-card-badge{
+display:inline-block;padding:3px 10px;border-radius:10px;
+font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;
+margin-bottom:10px;
+}
+.badge-vitc{background:#3d2010;color:#d4956a;}
+.badge-niacin{background:#102030;color:#6a9ab8;}
+.badge-retinol{background:#2d1040;color:#c890c8;}
+.badge-acid{background:#102818;color:#7ab890;}
+.badge-peel{background:#101828;color:#7a9ab8;}
+
+.step-card-product{font-family:‘Playfair Display’,serif;font-size:22px;font-weight:400;line-height:1.2;margin-bottom:4px;color:var(–text);}
+.step-card-brand{font-size:12px;color:var(–muted);letter-spacing:0.04em;margin-bottom:14px;}
+.step-card-note{font-size:14px;color:rgba(245,232,236,0.8);line-height:1.7;margin-bottom:20px;}
+
+/* TIMER AREA IN CARD */
+.timer-section{
+background:var(–card2);border-radius:14px;padding:18px;
+text-align:center;margin-bottom:4px;
+}
+.timer-wait-label{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(–muted);margin-bottom:10px;}
+.timer-ring-wrap{margin:0 auto 14px;width:80px;height:80px;position:relative;}
+.timer-ring-wrap svg{transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:var(–line);stroke-width:4;}
+.ring-fg{fill:none;stroke:var(–burg2);stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
+.ring-fg.done{stroke:var(–green);}
+.timer-ring-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:‘Playfair Display’,serif;font-size:18px;color:var(–text);}
+
+.timer-start-btn{
+width:100%;padding:12px;border-radius:12px;
+background:var(–burg);border:none;
+font-family:‘Jost’,sans-serif;font-size:13px;font-weight:500;
+color:#fff;cursor:pointer;transition:background 0.2s;letter-spacing:0.04em;
+}
+.timer-start-btn:hover{background:var(–burg2);}
+.timer-start-btn.running{background:var(–card);border:1px solid var(–line);color:var(–muted);}
+
+/* BOTTOM ACTIONS */
+.guide-footer{
+position:fixed;bottom:0;left:0;right:0;
+padding:16px 24px 28px;
+background:linear-gradient(to top,var(–bg) 60%,transparent);
+display:none;
+}
+#guide.active .guide-footer{display:block;}
+
+.next-btn{
+width:100%;padding:18px;border-radius:16px;
+background:linear-gradient(135deg,var(–burg2),var(–burg));
+border:none;font-family:‘Jost’,sans-serif;
+font-size:15px;font-weight:500;color:#fff;
+cursor:pointer;letter-spacing:0.04em;
+box-shadow:0 6px 24px rgba(196,72,90,0.4);
+transition:transform 0.15s,box-shadow 0.15s;
+}
+.next-btn:active{transform:scale(0.98);box-shadow:0 3px 12px rgba(196,72,90,0.3);}
+.next-btn.last{background:linear-gradient(135deg,var(–green),#4a8a6a);}
+
+/* DONE SCREEN */
+.done-screen{
+display:none;flex-direction:column;align-items:center;
+justify-content:center;min-height:80vh;padding:40px 28px;
+text-align:center;background:var(–bg);
+}
+.done-screen.active{display:flex;}
+.done-icon{font-size:64px;margin-bottom:20px;}
+.done-title{font-family:‘Playfair Display’,serif;font-size:30px;font-weight:400;margin-bottom:10px;color:var(–text);}
+.done-sub{font-size:14px;color:var(–muted);line-height:1.7;margin-bottom:32px;}
+.done-back{
+padding:14px 32px;border-radius:14px;
+background:var(–card);border:1px solid var(–line);
+font-family:‘Jost’,sans-serif;font-size:13px;font-weight:500;
+color:var(–text);cursor:pointer;letter-spacing:0.04em;
+}
+</style>
+
+</head>
+<body>
+
+<!-- HOME -->
+
+<div id="home">
+  <div class="home-top">
+    <div class="home-date" id="homeDate"></div>
+    <div class="home-title">Moja<br><em>Rutyna</em></div>
+    <div class="active-pill" id="activePill"></div>
+    <div class="home-sub" id="homeSub"></div>
+  </div>
+
+  <div class="home-btns">
+    <button class="main-btn btn-am" onclick="startRoutine('am')">
+      <div class="btn-icon">🌸</div>
+      <div class="btn-text">
+        <strong>Poranna rutyna</strong>
+        <span id="amStepCount"></span>
+      </div>
+    </button>
+    <button class="main-btn btn-pm" onclick="startRoutine('pm')">
+      <div class="btn-icon">🌙</div>
+      <div class="btn-text">
+        <strong>Wieczorna rutyna</strong>
+        <span id="pmStepCount"></span>
+      </div>
+    </button>
+  </div>
+
+  <div class="week-strip">
+    <div class="week-strip-label">Tydzień</div>
+    <div class="week-row" id="weekRow"></div>
+  </div>
+</div>
+
+<!-- GUIDE -->
+
+<div id="guide">
+  <div class="guide-header">
+    <div class="back-btn" onclick="goHome()">←</div>
+    <div class="guide-header-text">
+      <div class="guide-header-label" id="guideLabel"></div>
+      <div class="guide-header-title" id="guideTitle"></div>
+    </div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-numbers"><span id="progressText"></span><span id="progressPct"></span></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="step-area" id="stepArea"></div>
+
+  <div class="done-screen" id="doneScreen">
+    <div class="done-icon">✨</div>
+    <div class="done-title" id="doneTitle"></div>
+    <div class="done-sub" id="doneSub"></div>
+    <button class="done-back" onclick="goHome()">← Wróć do strony głównej</button>
+  </div>
+
+  <div class="guide-footer">
+    <button class="next-btn" id="nextBtn" onclick="nextStep()">Dalej →</button>
+  </div>
+</div>
+
+<script>
+const DAYS = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
+const DAYS_SHORT = ['Nd','Pn','Wt','Śr','Cz','Pt','Sb'];
+
+const SCHEDULE = {
+  1:{type:'acid',    label:'Kwas Azelainowy', tagClass:'dot-acid'},
+  2:{type:'retinol', label:'Retinol',         tagClass:'dot-retinol'},
+  3:{type:'peel',    label:'Peeling',         tagClass:'dot-peel'},
+  4:{type:'acid',    label:'Kwas Azelainowy', tagClass:'dot-acid'},
+  5:{type:'retinol', label:'Retinol',         tagClass:'dot-retinol'},
+  6:{type:'retinol', label:'Retinol',         tagClass:'dot-retinol'},
+  0:{type:'rest',    label:'Przerwa',         tagClass:'dot-rest'},
+};
+
+const ACTIVE_DESC = {
+  acid:'Theramid Azid redukuje zaczerwienienia i przebarwienia.',
+  retinol:'Greek & Gorgeous pracuje na teksturę i anty-age.',
+  peel:'Lactic Acid złuszcza, rozjaśnia i nawilża.',
+  rest:'Dzień odpoczynku — sama pielęgnacja.',
+};
+
+const AM_STEPS = [
+  {product:'Clean Me Soft', brand:'Veoli Botanica', note:'Masuj delikatnie przez 60 sekund, spłucz letnią wodą. Skóra lekko wilgotna — idealnie.', waitSec:60, waitLabel:'1 minuta'},
+  {product:'Vitamin C Serum', brand:'The Ordinary — Ascorbyl Glucoside 12%', badge:'badge-vitc', badgeLabel:'Wit. C', note:'Kilka kropli na suchą skórę, wklepać delikatnie opuszkami palców.', waitSec:150, waitLabel:'2–3 minuty'},
+  {product:'Niacinamide 10% + Zinc', brand:'The Ordinary', badge:'badge-niacin', badgeLabel:'Niacynamid', note:'Kilka kropli, rozsmarować równomiernie na całą twarz.', waitSec:120, waitLabel:'2 minuty'},
+  {product:'Rosaliac AR Concentrate', brand:'La Roche-Posay', note:'Rozsmarować po całej twarzy — optycznie neutralizuje zaczerwienienia.', waitSec:120, waitLabel:'2 minuty'},
+  {product:'Toleriane Sensitive', brand:'La Roche-Posay', note:'Cienka warstwa — lekkie nawilżenie przed SPF.', waitSec:150, waitLabel:'2–3 minuty'},
+  {product:'Anthelios UV Correct SPF50+', brand:'La Roche-Posay', note:'Min. ¼ łyżeczki. Ostatni krok — nie wcierać, delikatnie rozsmarować. Nawet w domu przy oknie.', waitSec:0, waitLabel:null},
+];
+
+function getPMSteps(type) {
+  const start = {product:'Clean Me Soft', brand:'Veoli Botanica', note:'Masuj delikatnie przez 60 sekund, spłucz letnią wodą.', waitSec:60, waitLabel:'1 minuta'};
+  const endActive = {product:'Cicaplast Baume B5', brand:'La Roche-Posay', note:'Hojna warstwa — zamknięcie po aktywnych składnikach. Regeneruje i wzmacnia barierę.', waitSec:0, waitLabel:null};
+  const endRest = {product:'Toleriane Double Repair', brand:'La Roche-Posay', note:'Hojna warstwa — czas na regenerację. Możesz nałożyć więcej niż zwykle.', waitSec:0, waitLabel:null};
+  const actives = {
+    acid:    {product:'Theramid Azid — Azelaic Acid 15%', brand:'Theramid', badge:'badge-acid', badgeLabel:'Kwas Azelainowy', note:'Cienka warstwa na całą twarz. Można nakładać blisko oczu.', waitSec:480, waitLabel:'5–10 minut'},
+    retinol: {product:'Retinol 0,05%', brand:'Greek & Gorgeous', badge:'badge-retinol', badgeLabel:'Retinol', note:'Kilka kropli na SUCHĄ skórę. Omijaj okolice oczu. Przy podrażnieniu: Cicaplast → retinol → Cicaplast.', waitSec:480, waitLabel:'5–10 minut'},
+    peel:    {product:'Lactic Acid 5%', brand:'The Ordinary', badge:'badge-peel', badgeLabel:'Peeling', note:'Równomiernie na całą twarz. Nie łączyć z innymi aktywnymi.', waitSec:480, waitLabel:'5–10 minut'},
+  };
+  if (type === 'rest') return [start, endRest];
+  return [start, actives[type], endActive];
+}
+
+// ── STATE ──
+let currentMode = null;
+let currentSteps = [];
+let currentIdx = 0;
+let timerInterval = null;
+let timerLeft = 0;
+let timerTotal = 0;
+
+function goHome() {
+  clearTimerInterval();
+  document.getElementById('home').style.display = 'flex';
+  document.getElementById('guide').classList.remove('active');
+  document.getElementById('doneScreen').classList.remove('active');
+  document.getElementById('stepArea').style.display = 'block';
+  document.getElementById('guide-footer') && null;
+  document.querySelector('.guide-footer').style.display = 'block';
+}
+
+function startRoutine(mode) {
+  const dow = new Date().getDay();
+  const sched = SCHEDULE[dow];
+  currentMode = mode;
+  currentSteps = mode === 'am' ? AM_STEPS : getPMSteps(sched.type);
+  currentIdx = 0;
+
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('guide').classList.add('active');
+  document.getElementById('doneScreen').classList.remove('active');
+  document.getElementById('stepArea').style.display = 'block';
+  document.querySelector('.guide-footer').style.display = 'block';
+  document.getElementById('guideLabel').textContent = mode === 'am' ? '🌸 Rano' : '🌙 Wieczór';
+  document.getElementById('guideTitle').textContent = DAYS[dow];
+
+  renderStep();
+}
+
+function renderStep() {
+  clearTimerInterval();
+  const s = currentSteps[currentIdx];
+  const total = currentSteps.length;
+  const num = currentIdx + 1;
+  const pct = Math.round(((currentIdx) / total) * 100);
+
+  document.getElementById('progressText').textContent = `Krok ${num} z ${total}`;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  const isLast = currentIdx === total - 1;
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.textContent = isLast ? 'Zakończ rutynę ✓' : 'Dalej →';
+  nextBtn.className = 'next-btn' + (isLast ? ' last' : '');
+
+  const timerHTML = s.waitSec > 0 ? `
+    <div class="timer-section">
+      <div class="timer-wait-label">Odczekaj po nałożeniu</div>
+      <div class="timer-ring-wrap">
+        <svg width="80" height="80" viewBox="0 0 80 80">
+          <circle class="ring-bg" cx="40" cy="40" r="34"/>
+          <circle class="ring-fg" id="ringFg" cx="40" cy="40" r="34"
+            stroke-dasharray="${2*Math.PI*34}"
+            stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-ring-inner" id="timerRingInner">${formatTime(s.waitSec)}</div>
+      </div>
+      <button class="timer-start-btn" id="timerStartBtn" onclick="toggleTimer()">▶ Start ${s.waitLabel}</button>
+    </div>` : '';
+
+  document.getElementById('stepArea').innerHTML = `
+    <div class="step-card">
+      <div class="step-card-num">Krok ${num} z ${total}</div>
+      ${s.badge ? `<div class="step-card-badge ${s.badge}">${s.badgeLabel}</div>` : ''}
+      <div class="step-card-product">${s.product}</div>
+      <div class="step-card-brand">${s.brand}</div>
+      <div class="step-card-note">${s.note}</div>
+      ${timerHTML}
+    </div>`;
+}
+
+function nextStep() {
+  clearTimerInterval();
+  currentIdx++;
+  if (currentIdx >= currentSteps.length) {
+    showDone();
+  } else {
+    renderStep();
+  }
+}
+
+function showDone() {
+  document.getElementById('stepArea').style.display = 'none';
+  document.querySelector('.guide-footer').style.display = 'none';
+  const doneScreen = document.getElementById('doneScreen');
+  doneScreen.classList.add('active');
+  const isAm = currentMode === 'am';
+  document.getElementById('doneTitle').textContent = isAm ? 'Rano zaliczone!' : 'Dobranoc!';
+  document.getElementById('doneSub').textContent = isAm
+    ? 'Świetnie. Skóra nawilżona, chroniona, gotowa na dzień.\nDo zobaczenia wieczorem.'
+    : 'Składniki aktywne pracują przez całą noc.\nDo zobaczenia rano.';
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressText').textContent = `Ukończono ${currentSteps.length} kroków`;
+  document.getElementById('progressPct').textContent = '100%';
+}
+
+// ── TIMER ──
+function formatTime(sec) {
+  const m = Math.floor(sec/60), s = sec%60;
+  return `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+function clearTimerInterval() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+function toggleTimer() {
+  const btn = document.getElementById('timerStartBtn');
+  if (!btn) return;
+  if (timerInterval) {
+    clearTimerInterval();
+    btn.textContent = `▶ Wznów`;
+    btn.classList.remove('running');
+    return;
+  }
+  const s = currentSteps[currentIdx];
+  if (timerLeft === 0) timerLeft = s.waitSec;
+  timerTotal = s.waitSec;
+  btn.textContent = '⏸ Pauza';
+  btn.classList.add('running');
+  timerInterval = setInterval(() => {
+    timerLeft--;
+    updateTimerUI();
+    if (timerLeft <= 0) {
+      clearTimerInterval();
+      const inner = document.getElementById('timerRingInner');
+      const ring = document.getElementById('ringFg');
+      const btn2 = document.getElementById('timerStartBtn');
+      if (inner) inner.textContent = '✓';
+      if (ring) ring.classList.add('done');
+      if (btn2) { btn2.textContent = 'Gotowe ✓'; btn2.classList.remove('running'); btn2.classList.add('done'); btn2.style.background='#2a4a38'; btn2.style.color='#7ab890'; }
+      try { navigator.vibrate && navigator.vibrate([200,100,200]); } catch(e){}
+    }
+  }, 1000);
+}
+
+function updateTimerUI() {
+  const inner = document.getElementById('timerRingInner');
+  const ring = document.getElementById('ringFg');
+  if (!inner || !ring) return;
+  inner.textContent = formatTime(timerLeft);
+  const circ = 2 * Math.PI * 34;
+  const offset = circ * (1 - timerLeft / timerTotal);
+  ring.style.strokeDashoffset = offset;
+}
+
+// ── INIT ──
+function init() {
+  const now = new Date();
+  const dow = now.getDay();
+  const sched = SCHEDULE[dow];
+
+  document.getElementById('homeDate').textContent =
+    `${DAYS[dow]} · ${now.toLocaleDateString('pl-PL',{day:'numeric',month:'long'})}`;
+
+  document.getElementById('activePill').textContent = sched.label;
+  document.getElementById('homeSub').textContent = ACTIVE_DESC[sched.type];
+
+  document.getElementById('amStepCount').textContent = `${AM_STEPS.length} kroków · ~15 min`;
+  const pmS = getPMSteps(sched.type);
+  document.getElementById('pmStepCount').textContent =
+    sched.type === 'rest' ? `${pmS.length} kroki · dzień odpoczynku` : `${pmS.length} kroki · z ${sched.label.toLowerCase()}`;
+
+  // Week
+  const row = document.getElementById('weekRow');
+  [1,2,3,4,5,6,0].forEach(d => {
+    const s = SCHEDULE[d];
+    const isToday = d === dow;
+    row.innerHTML += `<div class="wday ${isToday?'wday-today':''}">
+      <div class="wday-name">${DAYS_SHORT[d]}</div>
+      <div class="wday-dot ${s.tagClass}">${s.label.substring(0,3)}</div>
+    </div>`;
+  });
+}
+
+init();
+</script>
+
+</body>
+</html>
