@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moja Rutyna</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #f5f1ed;
+  --card: #fdfcfb;
+  --text: #27211c;
+  --muted: #9c8f87;
+  --accent: #b8956a;
+  --accent2: #7a9e8e;
+  --line: #e6dfd8;
+}
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding-bottom:60px; }
+
+header { background:var(–bg); padding:32px 20px 0; position:sticky; top:0; z-index:20; border-bottom:1px solid var(–line); }
+.header-row { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+h1 { font-family:‘Cormorant Garamond’,serif; font-weight:300; font-size:25px; line-height:1.15; letter-spacing:0.01em; }
+h1 em { font-style:italic; color:var(–accent); }
+.date-info { text-align:right; font-size:11px; font-weight:500; letter-spacing:0.09em; text-transform:uppercase; color:var(–muted); line-height:1.6; }
+
+.day-tabs { display:flex; gap:5px; overflow-x:auto; scrollbar-width:none; padding:0 0 14px; }
+.day-tabs::-webkit-scrollbar { display:none; }
+.tab { flex-shrink:0; padding:5px 13px; border-radius:20px; font-size:11.5px; font-weight:500; cursor:pointer; border:1.5px solid var(–line); background:transparent; color:var(–muted); transition:all 0.18s; font-family:‘DM Sans’,sans-serif; }
+.tab:hover { border-color:var(–accent); color:var(–accent); }
+.tab.today { border-color:var(–accent); color:var(–accent); }
+.tab.active { background:var(–text); color:#fff; border-color:var(–text); }
+.tab.today.active { background:var(–accent); border-color:var(–accent); color:#fff; }
+
+main { padding:24px 20px; max-width:520px; margin:0 auto; }
+
+.day-tag { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; }
+.tag-retinol { background:#f2eaf2; color:#7a4f7a; }
+.tag-acid    { background:#eaf2ec; color:#3d7048; }
+.tag-peel    { background:#eaf0f4; color:#3a6070; }
+.tag-rest    { background:#f4f0ea; color:#6a5a3a; }
+
+.day-name { font-family:‘Cormorant Garamond’,serif; font-size:23px; font-weight:300; margin-bottom:4px; }
+.day-desc { font-size:12px; color:var(–muted); line-height:1.5; margin-bottom:24px; }
+
+.rest-card { background:var(–card); border:1px solid var(–line); border-radius:14px; padding:26px 20px; text-align:center; margin-bottom:16px; }
+.rest-icon { font-size:30px; margin-bottom:10px; }
+.rest-card h3 { font-family:‘Cormorant Garamond’,serif; font-size:19px; font-weight:300; margin-bottom:8px; }
+.rest-card p { font-size:12.5px; color:var(–muted); line-height:1.7; }
+
+.routine-block { margin-bottom:26px; animation:fadeUp 0.3s ease both; }
+.routine-block:nth-child(3) { animation-delay:0.08s; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+.block-head { display:flex; align-items:center; gap:10px; margin-bottom:13px; }
+.block-icon { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+.am-icon { background:#f5e8d4; }
+.pm-icon { background:#d4e5ec; }
+.block-title { font-family:‘Cormorant Garamond’,serif; font-size:18px; font-weight:400; }
+
+.steps { display:flex; flex-direction:column; gap:8px; }
+.step { display:flex; gap:12px; align-items:flex-start; padding:13px 14px; background:var(–card); border-radius:12px; border:1px solid var(–line); cursor:pointer; transition:all 0.15s; position:relative; overflow:hidden; }
+.step::after { content:’’; position:absolute; left:0; top:0; bottom:0; width:3px; background:transparent; transition:background 0.2s; }
+.step:active { transform:scale(0.99); }
+.step.done { opacity:0.45; }
+.step.done::after { background:var(–accent2); }
+
+.step-num { width:20px; height:20px; border-radius:50%; background:var(–bg); border:1.5px solid var(–line); font-size:10px; font-weight:500; color:var(–muted); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; transition:all 0.2s; }
+.step.done .step-num { background:var(–accent2); border-color:var(–accent2); color:#fff; }
+
+.step-body { flex:1; min-width:0; }
+.step-product { font-size:13px; font-weight:500; line-height:1.3; margin-bottom:1px; }
+.step-brand { font-size:10.5px; color:var(–muted); letter-spacing:0.03em; margin-bottom:3px; }
+.step-note { font-size:11.5px; color:var(–muted); line-height:1.55; }
+.step-wait { margin-top:5px; font-size:10px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(–accent); }
+
+.active-badge { display:inline-block; padding:1.5px 7px; border-radius:8px; font-size:9.5px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:3px; }
+.badge-retinol { background:#f2eaf2; color:#7a4f7a; }
+.badge-acid    { background:#eaf2ec; color:#3d7048; }
+.badge-peel    { background:#eaf0f4; color:#3a6070; }
+.badge-vitc    { background:#fdf0e0; color:#8a5a1a; }
+.badge-niacin  { background:#e8f0f8; color:#2a5080; }
+
+.week-section { margin-top:30px; padding-top:22px; border-top:1px solid var(–line); }
+.section-label { font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(–muted); margin-bottom:13px; }
+.week-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; }
+.wday { text-align:center; }
+.wday-name { font-size:9px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:var(–muted); margin-bottom:5px; }
+.wday-pill { padding:5px 2px; border-radius:7px; font-size:8px; font-weight:500; line-height:1.3; text-align:center; }
+.wpill-retinol { background:#f2eaf2; color:#7a4f7a; }
+.wpill-acid    { background:#eaf2ec; color:#3d7048; }
+.wpill-peel    { background:#eaf0f4; color:#3a6070; }
+.wpill-rest    { background:#f4f0ea; color:#6a5a3a; }
+.wday-today .wday-pill { outline:2px solid var(–accent); outline-offset:2px; border-radius:7px; }
+
+.reset-btn { display:block; width:100%; margin-top:18px; padding:11px; border:1.5px solid var(–line); border-radius:10px; background:transparent; font-family:‘DM Sans’,sans-serif; font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(–muted); cursor:pointer; transition:all 0.2s; }
+.reset-btn:hover { border-color:var(–accent); color:var(–accent); }
+
+/* TIMER */
+.timer-bar { position:fixed; bottom:0; left:0; right:0; background:var(–card); border-top:1px solid var(–line); padding:12px 20px 20px; z-index:100; display:none; flex-direction:column; align-items:center; gap:8px; box-shadow:0 -4px 20px rgba(0,0,0,0.08); }
+.timer-bar.visible { display:flex; }
+.timer-label { font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(–muted); }
+.timer-display { font-family:‘Cormorant Garamond’,serif; font-size:42px; font-weight:300; color:var(–text); letter-spacing:0.05em; line-height:1; }
+.timer-display.flash { color:var(–accent2); }
+.timer-track { width:100%; max-width:260px; height:3px; background:var(–line); border-radius:2px; overflow:hidden; }
+.timer-fill { height:100%; background:var(–accent); border-radius:2px; transition:width 1s linear; width:100%; }
+.timer-btns { display:flex; gap:8px; }
+.timer-btn { padding:6px 18px; border-radius:20px; font-size:11px; font-weight:500; font-family:‘DM Sans’,sans-serif; cursor:pointer; border:1.5px solid var(–line); background:transparent; color:var(–muted); transition:all 0.18s; }
+.timer-btn.primary { background:var(–accent); border-color:var(–accent); color:#fff; }
+.step-timer-btn { display:inline-flex; align-items:center; gap:4px; margin-top:6px; padding:3px 10px; border-radius:12px; font-size:10px; font-weight:500; font-family:‘DM Sans’,sans-serif; cursor:pointer; border:1px solid var(–line); background:var(–bg); color:var(–muted); transition:all 0.18s; }
+.step-timer-btn:hover { border-color:var(–accent); color:var(–accent); }
+.step-timer-btn.running { border-color:var(–accent); color:var(–accent); background:#fdf5ec; }
+</style>
+
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <h1>Moja<br><em>Rutyna</em></h1>
+    <div class="date-info" id="dateInfo"></div>
+  </div>
+  <div class="day-tabs" id="dayTabs"></div>
+</header>
+
+<main id="main"></main>
+
+<!-- TIMER BAR -->
+
+<div class="timer-bar" id="timerBar">
+  <div class="timer-label" id="timerLabel">Odczekaj</div>
+  <div class="timer-display" id="timerDisplay">0:00</div>
+  <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+  <div class="timer-btns">
+    <button class="timer-btn" onclick="stopTimer()">Anuluj</button>
+    <button class="timer-btn primary" onclick="skipTimer()">Gotowe ✓</button>
+  </div>
+</div>
+
+<script>
+let timerInterval = null;
+let timerTotal = 0;
+let timerLeft = 0;
+let activeTimerBtn = null;
+
+function parseWait(waitStr) {
+  if (!waitStr) return 0;
+  const m = waitStr.match(/(\d+)/);
+  return m ? parseInt(m[1]) * 60 : 60;
+}
+
+function startTimer(seconds, label, btnEl) {
+  if (timerInterval) clearInterval(timerInterval);
+  if (activeTimerBtn) activeTimerBtn.classList.remove('running');
+  timerTotal = seconds;
+  timerLeft = seconds;
+  activeTimerBtn = btnEl;
+  if (btnEl) btnEl.classList.add('running');
+  document.getElementById('timerLabel').textContent = label || 'Odczekaj';
+  document.getElementById('timerBar').classList.add('visible');
+  document.body.style.paddingBottom = '120px';
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timerLeft--;
+    updateTimerDisplay();
+    if (timerLeft <= 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      document.getElementById('timerDisplay').classList.add('flash');
+      document.getElementById('timerLabel').textContent = 'Czas! Możesz nakładać kolejny produkt ✓';
+      if (activeTimerBtn) { activeTimerBtn.classList.remove('running'); activeTimerBtn.textContent = '✓ Gotowe'; }
+      setTimeout(() => document.getElementById('timerDisplay').classList.remove('flash'), 600);
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timerLeft / 60);
+  const s = timerLeft % 60;
+  document.getElementById('timerDisplay').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  const pct = timerTotal > 0 ? (timerLeft / timerTotal) * 100 : 100;
+  document.getElementById('timerFill').style.width = pct + '%';
+}
+
+function stopTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = null;
+  if (activeTimerBtn) { activeTimerBtn.classList.remove('running'); activeTimerBtn = null; }
+  document.getElementById('timerBar').classList.remove('visible');
+  document.body.style.paddingBottom = '60px';
+}
+
+function skipTimer() { stopTimer(); }
+
+const DAYS       = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
+const DAYS_SHORT = ['Nd','Pn','Wt','Śr','Cz','Pt','Sb'];
+
+const SCHEDULE = {
+  1: { type:'acid',    label:'Kwas Azelainowy', tagClass:'tag-acid',    desc:'Theramid Azid redukuje zaczerwienienia i przebarwienia.' },
+  2: { type:'retinol', label:'Retinol',         tagClass:'tag-retinol', desc:'Greek & Gorgeous pracuje na teksturę i anty-age.' },
+  3: { type:'peel',    label:'Peeling',         tagClass:'tag-peel',    desc:'Lactic Acid złuszcza, rozjaśnia i nawilża.' },
+  4: { type:'acid',    label:'Kwas Azelainowy', tagClass:'tag-acid',    desc:'Drugi raz w tygodniu — wyrównanie kolorytu i łagodzenie.' },
+  5: { type:'retinol', label:'Retinol',         tagClass:'tag-retinol', desc:'Drugi raz w tygodniu — tekstura, kolory, anty-age.' },
+  6: { type:'retinol', label:'Retinol',         tagClass:'tag-retinol', desc:'Trzeci raz w tygodniu — maksymalne działanie anty-age.' },
+  0: { type:'rest',    label:'Przerwa',         tagClass:'tag-rest',    desc:'Niedziela to dzień regeneracji — sama pielęgnacja.' },
+};
+
+const WEEK_LABELS = { acid:'Kwas', retinol:'Retinol', peel:'Peeling', rest:'Przerwa' };
+const WEEK_PILLS  = { acid:'wpill-acid', retinol:'wpill-retinol', peel:'wpill-peel', rest:'wpill-rest' };
+
+const AM_STEPS = [
+  { product:'Clean Me Soft', brand:'Veoli Botanica', note:'Masuj 60 sek, spłucz letnią wodą.', wait:'1 min' },
+  { product:'Vitamin C Serum', brand:'The Ordinary — Ascorbyl Glucoside 12%', badge:'badge-vitc', badgeLabel:'Wit. C', note:'Kilka kropli na suchą skórę, wklepać delikatnie.', wait:'2–3 min' },
+  { product:'Niacinamide 10% + Zinc', brand:'The Ordinary', badge:'badge-niacin', badgeLabel:'Niacynamid', note:'Kilka kropli, rozsmarować równomiernie.', wait:'2 min' },
+  { product:'Rosaliac AR Concentrate', brand:'La Roche-Posay', note:'Na całą twarz — optycznie neutralizuje zaczerwienienia.', wait:'2 min' },
+  { product:'Toleriane Sensitive', brand:'La Roche-Posay', note:'Cienka warstwa nawilżenia przed SPF.', wait:'2–3 min' },
+  { product:'Anthelios UV Correct SPF50+', brand:'La Roche-Posay', note:'Min. ¼ łyżeczki. Ostatni krok, nie wcierać. Nawet w domu przy oknie.', wait:null },
+];
+
+function getPMSteps(type) {
+  const start = { product:'Clean Me Soft', brand:'Veoli Botanica', note:'Masuj 60 sek, spłucz letnią wodą.', wait:'1 min' };
+  const end_active = { product:'Cicaplast Baume B5', brand:'La Roche-Posay', note:'Zamknięcie po aktywnych. Regeneruje i wzmacnia barierę.', wait:null };
+  const end_rest   = { product:'Toleriane Double Repair', brand:'La Roche-Posay', note:'Hojna warstwa — czas na regenerację.', wait:null };
+
+  if (type === 'rest') return [start, end_rest];
+
+  const actives = {
+    acid:    { product:'Theramid Azid — Azelaic Acid 15%', brand:'Theramid', badge:'badge-acid', badgeLabel:'Kwas Azelainowy', note:'Cienka warstwa na całą twarz. Można nakładać pod oczy.', wait:'5–10 min' },
+    retinol: { product:'Retinol 0,05%', brand:'Greek & Gorgeous', badge:'badge-retinol', badgeLabel:'Retinol', note:'Kilka kropli na SUCHĄ skórę. Omijaj okolice oczu. Przy podrażnieniu zastosuj sandwich: Cicaplast → retinol → Cicaplast.', wait:'5–10 min' },
+    peel:    { product:'Lactic Acid 5%', brand:'The Ordinary', badge:'badge-peel', badgeLabel:'Peeling', note:'Równomiernie na całą twarz. Nie łączyć z innymi aktywnymi.', wait:'5–10 min' },
+  };
+
+  return [start, actives[type], end_active];
+}
+
+function renderSteps(steps, prefix) {
+  const stored = JSON.parse(localStorage.getItem('done_'+prefix) || '[]');
+  return '<div class="steps">' + steps.map((s, i) => {
+    const done = stored.includes(i) ? 'done' : '';
+    const icon = stored.includes(i) ? '✓' : (i+1);
+    const waitSecs = parseWait(s.wait);
+    const timerBtn = s.wait ? `<button class="step-timer-btn" onclick="event.stopPropagation();startTimer(${waitSecs},'Przerwa po: ${s.product}',this)">⏱ Start ${s.wait}</button>` : '';
+    return `<div class="step ${done}" onclick="toggleStep(this)" data-prefix="${prefix}" data-idx="${i}">
+      <div class="step-num">${icon}</div>
+      <div class="step-body">
+        ${s.badge ? `<div class="active-badge ${s.badge}">${s.badgeLabel}</div>` : ''}
+        <div class="step-product">${s.product}</div>
+        <div class="step-brand">${s.brand}</div>
+        <div class="step-note">${s.note}</div>
+        ${timerBtn}
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function toggleStep(el) {
+  const prefix = el.dataset.prefix;
+  const idx = parseInt(el.dataset.idx);
+  const key = 'done_'+prefix;
+  let stored = JSON.parse(localStorage.getItem(key) || '[]');
+  stored = stored.includes(idx) ? stored.filter(x=>x!==idx) : [...stored, idx];
+  localStorage.setItem(key, JSON.stringify(stored));
+  renderDay(currentDay);
+}
+
+let currentDay = new Date().getDay();
+
+function renderDay(dow) {
+  currentDay = dow;
+  const sched = SCHEDULE[dow];
+  const today = new Date().toDateString();
+  const amKey = `am_${dow}_${today}`;
+  const pmKey = `pm_${dow}_${today}`;
+  const pmSteps = getPMSteps(sched.type);
+
+  let html = `<div class="day-name-header">
+    <div class="day-tag ${sched.tagClass}">${sched.label}</div>
+    <div class="day-name">${DAYS[dow]}</div>
+    <div class="day-desc">${sched.desc}</div>
+  </div>`;
+
+  // MORNING
+  html += `<div class="routine-block">
+    <div class="block-head">
+      <div class="block-icon am-icon">🌤</div>
+      <div class="block-title">Rano</div>
+    </div>
+    ${renderSteps(AM_STEPS, amKey)}
+  </div>`;
+
+  // EVENING
+  if (sched.type === 'rest') {
+    html += `<div class="rest-card">
+      <div class="rest-icon">🌙</div>
+      <h3>Wieczór odpoczynku</h3>
+      <p>Dziś bez składników aktywnych.<br>Umyj twarz, nałóż <strong>Toleriane Double Repair</strong> — hojna warstwa.<br>Pozwól skórze odpocząć.</p>
+    </div>`;
+  } else {
+    html += `<div class="routine-block">
+      <div class="block-head">
+        <div class="block-icon pm-icon">🌙</div>
+        <div class="block-title">Wieczór</div>
+      </div>
+      ${renderSteps(pmSteps, pmKey)}
+    </div>`;
+  }
+
+  // Week overview
+  html += `<div class="week-section">
+    <div class="section-label">Plan tygodnia</div>
+    <div class="week-grid">`;
+  [1,2,3,4,5,6,0].forEach(d => {
+    const s = SCHEDULE[d];
+    const isToday = d === new Date().getDay();
+    html += `<div class="wday ${isToday?'wday-today':''}">
+      <div class="wday-name">${DAYS_SHORT[d]}</div>
+      <div class="wday-pill ${WEEK_PILLS[s.type]}">${WEEK_LABELS[s.type]}</div>
+    </div>`;
+  });
+  html += `</div></div>`;
+
+  html += `<button class="reset-btn" onclick="resetDay()">↺ Resetuj postęp dnia</button>`;
+
+  document.getElementById('main').innerHTML = html;
+
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', parseInt(t.dataset.dow) === dow);
+  });
+}
+
+function resetDay() {
+  const today = new Date().toDateString();
+  localStorage.removeItem(`done_am_${currentDay}_${today}`);
+  localStorage.removeItem(`done_pm_${currentDay}_${today}`);
+  renderDay(currentDay);
+}
+
+function init() {
+  const now = new Date();
+  const todayDow = now.getDay();
+
+  document.getElementById('dateInfo').innerHTML =
+    `${DAYS[todayDow]}<br>${now.toLocaleDateString('pl-PL',{day:'numeric',month:'long'})}`;
+
+  const tabsEl = document.getElementById('dayTabs');
+  [1,2,3,4,5,6,0].forEach(dow => {
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (dow===todayDow?' today':'');
+    btn.dataset.dow = dow;
+    btn.textContent = DAYS_SHORT[dow];
+    btn.onclick = () => renderDay(dow);
+    tabsEl.appendChild(btn);
+  });
+
+  renderDay(todayDow);
+}
+
+init();
+</script>
+
+</body>
+</html>
