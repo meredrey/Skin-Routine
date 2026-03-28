@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Moja Rutyna</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+:root {
+–bg:       #faf7f4;
+–bg2:      #f2ece6;
+–card:     #ffffff;
+–burg:     #7a1f2e;
+–burg2:    #a83347;
+–burg-lt:  #f5e8eb;
+–rose:     #d4768a;
+–text:     #1e1218;
+–muted:    #8a7070;
+–line:     #e8ddd8;
+–green:    #3d7a5a;
+–green-lt: #e8f4ee;
+–gold:     #9a6a30;
+–active-glow: rgba(168,51,71,0.12);
+}
+
+body {
+font-family: ‘Jost’, sans-serif;
+background: var(–bg);
+color: var(–text);
+min-height: 100vh;
+padding-bottom: 100px;
+}
+
+/* ── HEADER ── */
+.app-header {
+background: var(–burg);
+padding: 52px 24px 24px;
+position: sticky;
+top: 0;
+z-index: 30;
+}
+
+.header-top {
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+margin-bottom: 4px;
+}
+
+.app-title {
+font-family: ‘Playfair Display’, serif;
+font-size: 26px;
+font-weight: 400;
+color: #fff;
+line-height: 1.1;
+}
+.app-title em { font-style: italic; color: #f0b8c4; }
+
+.header-date {
+font-size: 11px;
+font-weight: 500;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: rgba(255,255,255,0.55);
+text-align: right;
+line-height: 1.6;
+}
+
+.today-active {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+margin-top: 10px;
+padding: 4px 12px;
+border-radius: 20px;
+background: rgba(255,255,255,0.12);
+border: 1px solid rgba(255,255,255,0.2);
+font-size: 11px;
+font-weight: 500;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+color: #f0b8c4;
+}
+
+/* ── WEEK BAR ── */
+.week-bar {
+background: var(–bg2);
+padding: 12px 20px;
+display: grid;
+grid-template-columns: repeat(7,1fr);
+gap: 4px;
+border-bottom: 1px solid var(–line);
+}
+
+.wd { text-align: center; }
+.wd-name {
+font-size: 9px;
+font-weight: 600;
+letter-spacing: 0.06em;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 4px;
+}
+.wd-pill {
+padding: 3px 2px;
+border-radius: 6px;
+font-size: 8px;
+font-weight: 600;
+text-align: center;
+letter-spacing: 0.03em;
+}
+.wp-acid    { background: #e8f2ec; color: #2d6040; }
+.wp-retinol { background: #f0e8f4; color: #6a3080; }
+.wp-peel    { background: #e8eef6; color: #2a4878; }
+.wp-rest    { background: #f0ece4; color: #6a5830; }
+.wd-today .wd-pill {
+outline: 2px solid var(–burg2);
+outline-offset: 1px;
+}
+
+/* ── SECTION TITLE ── */
+main { padding: 20px 18px 0; max-width: 540px; margin: 0 auto; }
+
+.section-head {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 16px 0 12px;
+}
+.section-icon {
+width: 36px; height: 36px;
+border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+font-size: 16px; flex-shrink: 0;
+}
+.icon-am { background: #fde8c0; }
+.icon-pm { background: #e0d0f0; }
+
+.section-label {
+font-family: ‘Playfair Display’, serif;
+font-size: 20px;
+font-weight: 400;
+flex: 1;
+}
+.section-count {
+font-size: 11px;
+color: var(–muted);
+font-weight: 500;
+}
+
+/* ── STEP CARD ── */
+.steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+
+.step-card {
+background: var(–card);
+border: 1.5px solid var(–line);
+border-radius: 16px;
+overflow: hidden;
+transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.step-card.active-step {
+border-color: var(–burg2);
+box-shadow: 0 0 0 3px var(–active-glow), 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.step-card.done-step {
+opacity: 0.55;
+border-color: var(–line);
+}
+
+.step-card.done-step .step-header { background: var(–green-lt); }
+
+.step-header {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 14px 16px;
+cursor: pointer;
+transition: background 0.15s;
+}
+
+.step-check {
+width: 22px; height: 22px;
+border-radius: 50%;
+border: 2px solid var(–line);
+display: flex; align-items: center; justify-content: center;
+flex-shrink: 0;
+font-size: 11px;
+color: var(–muted);
+font-weight: 600;
+transition: all 0.2s;
+}
+.step-card.done-step .step-check {
+background: var(–green);
+border-color: var(–green);
+color: #fff;
+}
+.step-card.active-step .step-check {
+background: var(–burg-lt);
+border-color: var(–burg2);
+color: var(–burg);
+}
+
+.step-header-text { flex: 1; min-width: 0; }
+.step-product-name {
+font-size: 14px;
+font-weight: 500;
+color: var(–text);
+line-height: 1.3;
+margin-bottom: 1px;
+}
+.step-brand-name {
+font-size: 11px;
+color: var(–muted);
+letter-spacing: 0.02em;
+}
+
+.step-badge {
+padding: 2px 8px;
+border-radius: 8px;
+font-size: 9px;
+font-weight: 600;
+letter-spacing: 0.06em;
+text-transform: uppercase;
+flex-shrink: 0;
+}
+.badge-vitc    { background: #fdf0e0; color: #8a5010; }
+.badge-niacin  { background: #e8f0fc; color: #2a4898; }
+.badge-retinol { background: #f4e8f8; color: #6a2888; }
+.badge-acid    { background: #e8f4ec; color: #1e6038; }
+.badge-peel    { background: #e8eef8; color: #1e3878; }
+
+.step-body {
+padding: 0 16px 14px 50px;
+display: none;
+}
+.step-card.active-step .step-body,
+.step-card.expanded .step-body { display: block; }
+
+.step-note {
+font-size: 13px;
+color: #4a3838;
+line-height: 1.65;
+margin-bottom: 12px;
+}
+
+/* ── TIMER ── */
+.timer-wrap {
+background: var(–bg2);
+border-radius: 12px;
+padding: 14px 16px;
+display: flex;
+align-items: center;
+gap: 14px;
+}
+
+.timer-ring-svg { flex-shrink: 0; }
+.ring-bg { fill:none; stroke:#ddd0c8; stroke-width:3; }
+.ring-fg { fill:none; stroke:var(–burg2); stroke-width:3; stroke-linecap:round; transition: stroke-dashoffset 1s linear; }
+.ring-fg.done { stroke: var(–green); }
+
+.timer-info { flex: 1; }
+.timer-countdown {
+font-family: ‘Playfair Display’, serif;
+font-size: 28px;
+font-weight: 400;
+color: var(–text);
+line-height: 1;
+margin-bottom: 2px;
+}
+.timer-countdown.done-color { color: var(–green); }
+.timer-sublabel {
+font-size: 10px;
+font-weight: 500;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+color: var(–muted);
+}
+
+.timer-btn {
+padding: 8px 16px;
+border-radius: 10px;
+background: var(–burg);
+border: none;
+color: #fff;
+font-family: ‘Jost’, sans-serif;
+font-size: 12px;
+font-weight: 600;
+cursor: pointer;
+letter-spacing: 0.04em;
+transition: background 0.2s;
+flex-shrink: 0;
+}
+.timer-btn:active { background: var(–burg2); }
+.timer-btn.paused { background: var(–bg); border: 1.5px solid var(–line); color: var(–muted); }
+.timer-btn.finished { background: var(–green); }
+
+/* ── DIVIDER ── */
+.section-divider {
+height: 1px;
+background: var(–line);
+margin: 20px 0 0;
+}
+
+/* ── FLOATING TIMER ── */
+#floatTimer {
+position: fixed;
+bottom: 0; left: 0; right: 0;
+background: var(–burg);
+padding: 12px 24px 28px;
+display: none;
+align-items: center;
+gap: 14px;
+z-index: 50;
+box-shadow: 0 -4px 24px rgba(122,31,46,0.25);
+}
+#floatTimer.visible { display: flex; }
+
+.float-label {
+flex: 1;
+font-size: 11px;
+font-weight: 500;
+letter-spacing: 0.06em;
+text-transform: uppercase;
+color: rgba(255,255,255,0.7);
+line-height: 1.4;
+}
+.float-label strong {
+display: block;
+font-family: ‘Playfair Display’, serif;
+font-size: 22px;
+font-weight: 400;
+color: #fff;
+letter-spacing: 0;
+text-transform: none;
+}
+.float-track {
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 3px;
+background: rgba(255,255,255,0.15);
+}
+.float-fill {
+height: 100%;
+background: #f0b8c4;
+transition: width 1s linear;
+}
+.float-stop {
+padding: 8px 16px;
+border-radius: 10px;
+background: rgba(255,255,255,0.15);
+border: 1px solid rgba(255,255,255,0.3);
+color: #fff;
+font-family: ‘Jost’, sans-serif;
+font-size: 12px;
+font-weight: 500;
+cursor: pointer;
+}
+</style>
+
+</head>
+<body>
+
+<div class="app-header">
+  <div class="header-top">
+    <div class="app-title">Moja <em>Rutyna</em></div>
+    <div class="header-date" id="headerDate"></div>
+  </div>
+  <div class="today-active" id="todayActive"></div>
+</div>
+
+<div class="week-bar" id="weekBar"></div>
+
+<main>
+  <!-- RANO -->
+  <div class="section-head">
+    <div class="section-icon icon-am">🌤</div>
+    <div class="section-label">Rano</div>
+    <div class="section-count" id="amCount"></div>
+  </div>
+  <div class="steps" id="amSteps"></div>
+
+  <div class="section-divider"></div>
+
+  <!-- WIECZÓR -->
+
+  <div class="section-head">
+    <div class="section-icon icon-pm">🌙</div>
+    <div class="section-label">Wieczór</div>
+    <div class="section-count" id="pmCount"></div>
+  </div>
+  <div class="steps" id="pmSteps"></div>
+</main>
+
+<!-- FLOATING TIMER -->
+
+<div id="floatTimer">
+  <div class="float-track"><div class="float-fill" id="floatFill"></div></div>
+  <div class="float-label">
+    Odczekaj
+    <strong id="floatTime">0:00</strong>
+  </div>
+  <button class="float-stop" onclick="stopCurrentTimer()">✕ Stop</button>
+</div>
+
+<script>
+const DAYS       = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
+const DAYS_SHORT = ['Nd','Pn','Wt','Śr','Cz','Pt','Sb'];
+
+const SCHEDULE = {
+  1:{type:'acid',    label:'Kwas Azelainowy', wpClass:'wp-acid'},
+  2:{type:'retinol', label:'Retinol',         wpClass:'wp-retinol'},
+  3:{type:'peel',    label:'Peeling',         wpClass:'wp-peel'},
+  4:{type:'acid',    label:'Kwas Azelainowy', wpClass:'wp-acid'},
+  5:{type:'retinol', label:'Retinol',         wpClass:'wp-retinol'},
+  6:{type:'retinol', label:'Retinol',         wpClass:'wp-retinol'},
+  0:{type:'rest',    label:'Przerwa',         wpClass:'wp-rest'},
+};
+
+const WEEK_LABELS = {acid:'Kwas',retinol:'Ret.',peel:'Peel',rest:'Prz.'};
+
+const AM_STEPS = [
+  {id:'am0', product:'Clean Me Soft', brand:'Veoli Botanica',
+   note:'Masuj delikatnie przez 60 sekund, spłucz letnią wodą.', waitSec:60, waitLabel:'1 min'},
+  {id:'am1', product:'Vitamin C Serum', brand:'The Ordinary — Ascorbyl Glucoside 12%',
+   badge:'badge-vitc', badgeLabel:'Wit. C',
+   note:'Kilka kropli na suchą skórę, wklepać delikatnie opuszkami palców.', waitSec:150, waitLabel:'2–3 min'},
+  {id:'am2', product:'Niacinamide 10% + Zinc', brand:'The Ordinary',
+   badge:'badge-niacin', badgeLabel:'Niacynamid',
+   note:'Kilka kropli, rozsmarować równomiernie po całej twarzy.', waitSec:120, waitLabel:'2 min'},
+  {id:'am3', product:'Rosaliac AR Concentrate', brand:'La Roche-Posay',
+   note:'Na całą twarz — optycznie neutralizuje zaczerwienienia.', waitSec:120, waitLabel:'2 min'},
+  {id:'am4', product:'Toleriane Sensitive', brand:'La Roche-Posay',
+   note:'Cienka warstwa nawilżenia przed SPF.', waitSec:150, waitLabel:'2–3 min'},
+  {id:'am5', product:'Anthelios UV Correct SPF50+', brand:'La Roche-Posay',
+   note:'Min. ¼ łyżeczki. Ostatni krok — nie wcierać, rozsmarować delikatnie. Nawet w domu!', waitSec:0},
+];
+
+function getPMSteps(type) {
+  const start = {id:'pm0', product:'Clean Me Soft', brand:'Veoli Botanica',
+    note:'Masuj przez 60 sekund, spłucz letnią wodą.', waitSec:60, waitLabel:'1 min'};
+  const endActive = {id:'pm2', product:'Cicaplast Baume B5', brand:'La Roche-Posay',
+    note:'Hojna warstwa — zamknięcie po aktywnych. Regeneruje i wzmacnia barierę skórną.', waitSec:0};
+  const endRest = {id:'pm1', product:'Toleriane Double Repair', brand:'La Roche-Posay',
+    note:'Hojna warstwa. Dzień odpoczynku — daj skórze czas na regenerację.', waitSec:0};
+  const actives = {
+    acid:    {id:'pm1', product:'Theramid Azid — Azelaic Acid 15%', brand:'Theramid',
+              badge:'badge-acid', badgeLabel:'Kwas Azelainowy',
+              note:'Cienka warstwa na całą twarz. Można nakładać blisko oczu.', waitSec:480, waitLabel:'5–10 min'},
+    retinol: {id:'pm1', product:'Retinol 0,05%', brand:'Greek & Gorgeous',
+              badge:'badge-retinol', badgeLabel:'Retinol',
+              note:'Kilka kropli na SUCHĄ skórę. Omijaj okolice oczu. Przy podrażnieniu: sandwich z Cicaplast.', waitSec:480, waitLabel:'5–10 min'},
+    peel:    {id:'pm1', product:'Lactic Acid 5%', brand:'The Ordinary',
+              badge:'badge-peel', badgeLabel:'Peeling',
+              note:'Równomiernie na całą twarz. Nie łączyć z innymi aktywnymi.', waitSec:480, waitLabel:'5–10 min'},
+  };
+  if (type==='rest') return [start, endRest];
+  return [start, actives[type], endActive];
+}
+
+// ── STATE ──
+const dow = new Date().getDay();
+const sched = SCHEDULE[dow];
+let activeTimer = null; // {stepId, interval, left, total}
+let doneSteps = new Set();
+
+// ── RENDER ──
+function renderStep(s, idx, prefix) {
+  const stepId = prefix + idx;
+  const isDone = doneSteps.has(stepId);
+  const isActive = activeTimer && activeTimer.stepId === stepId;
+
+  const circum = 2 * Math.PI * 16;
+  let timerHTML = '';
+  if (s.waitSec > 0) {
+    const left = (isActive ? activeTimer.left : s.waitSec);
+    const offset = isActive ? circum * (1 - left/activeTimer.total) : 0;
+    const isDoneTimer = isActive && activeTimer.left <= 0;
+    timerHTML = `
+    <div class="timer-wrap" id="tw-${stepId}">
+      <svg class="timer-ring-svg" width="40" height="40" viewBox="0 0 40 40">
+        <circle class="ring-bg" cx="20" cy="20" r="16"/>
+        <circle class="ring-fg ${isDoneTimer?'done':''}" id="rfg-${stepId}" cx="20" cy="20" r="16"
+          stroke-dasharray="${circum}" stroke-dashoffset="${offset}"
+          transform="rotate(-90 20 20)"/>
+      </svg>
+      <div class="timer-info">
+        <div class="timer-countdown ${isDoneTimer?'done-color':''}" id="tc-${stepId}">${formatTime(left)}</div>
+        <div class="timer-sublabel">${s.waitLabel || ''}</div>
+      </div>
+      <button class="timer-btn ${isActive&&activeTimer.left>0?'paused':''} ${isDoneTimer?'finished':''}"
+        id="tbtn-${stepId}"
+        onclick="handleTimerBtn('${stepId}', ${s.waitSec})">
+        ${isDoneTimer ? '✓ Gotowe' : isActive ? '⏸' : '▶ Start'}
+      </button>
+    </div>`;
+  }
+
+  return `
+  <div class="step-card ${isDone?'done-step':''} ${isActive?'active-step':''} ${isActive||isDone?'expanded':''}"
+       id="sc-${stepId}" onclick="toggleExpand('${stepId}')">
+    <div class="step-header">
+      <div class="step-check">${isDone?'✓':idx+1}</div>
+      <div class="step-header-text">
+        <div class="step-product-name">${s.product}</div>
+        <div class="step-brand-name">${s.brand}</div>
+      </div>
+      ${s.badge ? `<div class="step-badge ${s.badge}">${s.badgeLabel}</div>` : ''}
+    </div>
+    <div class="step-body">
+      <div class="step-note">${s.note}</div>
+      ${timerHTML}
+    </div>
+  </div>`;
+}
+
+function renderAll() {
+  const amSteps = AM_STEPS;
+  const pmSteps = getPMSteps(sched.type);
+
+  document.getElementById('amSteps').innerHTML = amSteps.map((s,i) => renderStep(s,i,'am')).join('');
+  document.getElementById('pmSteps').innerHTML = pmSteps.map((s,i) => renderStep(s,i,'pm')).join('');
+
+  document.getElementById('amCount').textContent = `${amSteps.length} kroków`;
+  document.getElementById('pmCount').textContent = `${pmSteps.length} kroki`;
+}
+
+function toggleExpand(stepId) {
+  const card = document.getElementById('sc-'+stepId);
+  if (!card) return;
+  card.classList.toggle('expanded');
+}
+
+// ── TIMER ──
+function formatTime(sec) {
+  const m = Math.floor(Math.max(0,sec)/60);
+  const s = Math.max(0,sec)%60;
+  return `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+function handleTimerBtn(stepId, totalSec) {
+  if (activeTimer && activeTimer.stepId === stepId && activeTimer.left > 0) {
+    // pause/resume - just stop for simplicity
+    clearInterval(activeTimer.interval);
+    activeTimer.interval = null;
+    document.getElementById('floatTimer').classList.remove('visible');
+    document.body.style.paddingBottom = '100px';
+    renderAll();
+    return;
+  }
+  startTimer(stepId, totalSec);
+}
+
+function startTimer(stepId, totalSec) {
+  if (activeTimer) {
+    clearInterval(activeTimer.interval);
+  }
+  activeTimer = { stepId, total: totalSec, left: totalSec, interval: null };
+
+  const floatTimer = document.getElementById('floatTimer');
+  floatTimer.classList.add('visible');
+  document.body.style.paddingBottom = '160px';
+
+  renderAll();
+
+  activeTimer.interval = setInterval(() => {
+    activeTimer.left--;
+    updateTimerUI();
+    if (activeTimer.left <= 0) {
+      clearInterval(activeTimer.interval);
+      activeTimer.interval = null;
+      onTimerDone();
+    }
+  }, 1000);
+}
+
+function updateTimerUI() {
+  if (!activeTimer) return;
+  const { stepId, left, total } = activeTimer;
+  const circum = 2 * Math.PI * 16;
+
+  // In-card
+  const tc = document.getElementById('tc-'+stepId);
+  const rfg = document.getElementById('rfg-'+stepId);
+  if (tc) tc.textContent = formatTime(left);
+  if (rfg) rfg.style.strokeDashoffset = circum * (1 - left/total);
+
+  // Float
+  document.getElementById('floatTime').textContent = formatTime(left);
+  document.getElementById('floatFill').style.width = ((1 - left/total)*100) + '%';
+}
+
+function onTimerDone() {
+  if (!activeTimer) return;
+  const stepId = activeTimer.stepId;
+
+  // Mark step done
+  doneSteps.add(stepId);
+
+  // Float feedback
+  document.getElementById('floatTime').textContent = '✓';
+  document.getElementById('floatFill').style.width = '100%';
+  document.getElementById('floatFill').style.background = '#7ab890';
+
+  try { navigator.vibrate && navigator.vibrate([150,80,150]); } catch(e){}
+
+  // Auto-advance: find next step and start its timer after 1.5s
+  setTimeout(() => {
+    document.getElementById('floatTimer').classList.remove('visible');
+    document.getElementById('floatFill').style.background = '#f0b8c4';
+    document.body.style.paddingBottom = '100px';
+
+    // find next step with timer
+    const nextId = findNextTimer(stepId);
+    activeTimer = null;
+    renderAll();
+
+    if (nextId) {
+      const nextCard = document.getElementById('sc-'+nextId);
+      if (nextCard) {
+        nextCard.scrollIntoView({behavior:'smooth', block:'center'});
+        setTimeout(() => {
+          const allSteps = [...AM_STEPS, ...getPMSteps(sched.type)];
+          const prefix = nextId.startsWith('am') ? 'am' : 'pm';
+          const idx = parseInt(nextId.replace(prefix,''));
+          const steps = prefix==='am' ? AM_STEPS : getPMSteps(sched.type);
+          const s = steps[idx];
+          if (s && s.waitSec > 0) startTimer(nextId, s.waitSec);
+        }, 800);
+      }
+    }
+  }, 1500);
+}
+
+function findNextTimer(currentId) {
+  const prefix = currentId.startsWith('am') ? 'am' : 'pm';
+  const idx = parseInt(currentId.replace(prefix,''));
+  const steps = prefix==='am' ? AM_STEPS : getPMSteps(sched.type);
+
+  // Try next steps in same section
+  for (let i = idx+1; i < steps.length; i++) {
+    const nid = prefix+i;
+    if (!doneSteps.has(nid) && steps[i].waitSec > 0) return nid;
+  }
+  // If AM, try PM
+  if (prefix === 'am') {
+    const pmSteps = getPMSteps(sched.type);
+    for (let i = 0; i < pmSteps.length; i++) {
+      const nid = 'pm'+i;
+      if (!doneSteps.has(nid) && pmSteps[i].waitSec > 0) return nid;
+    }
+  }
+  return null;
+}
+
+function stopCurrentTimer() {
+  if (!activeTimer) return;
+  clearInterval(activeTimer.interval);
+  activeTimer = null;
+  document.getElementById('floatTimer').classList.remove('visible');
+  document.getElementById('floatFill').style.width = '0%';
+  document.body.style.paddingBottom = '100px';
+  renderAll();
+}
+
+// ── INIT ──
+function init() {
+  const now = new Date();
+
+  document.getElementById('headerDate').innerHTML =
+    `${DAYS[dow]}<br>${now.toLocaleDateString('pl-PL',{day:'numeric',month:'long'})}`;
+
+  document.getElementById('todayActive').textContent =
+    sched.type === 'rest' ? '🌿 Dzień odpoczynku' : `🌙 Wieczór: ${sched.label}`;
+
+  // Week bar
+  const wb = document.getElementById('weekBar');
+  [1,2,3,4,5,6,0].forEach(d => {
+    const s = SCHEDULE[d];
+    const isToday = d === dow;
+    wb.innerHTML += `<div class="wd ${isToday?'wd-today':''}">
+      <div class="wd-name">${DAYS_SHORT[d]}</div>
+      <div class="wd-pill ${s.wpClass}">${WEEK_LABELS[s.type]}</div>
+    </div>`;
+  });
+
+  renderAll();
+}
+
+init();
+</script>
+
+</body>
+</html>
